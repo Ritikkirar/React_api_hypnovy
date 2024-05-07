@@ -1,0 +1,27 @@
+name: Platinum Security Deployment
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Nodejs Deployment
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/platinum-security-api
+            chmod +x deployment.sh && ./deployment.sh
+            chmod +x pm2_restart.sh && ./pm2_restart.sh
+
+
+
